@@ -8,11 +8,19 @@ const app = express()
 
 dotenv.config()
 
+// define vue app url 
+const corsOption = {
+	origin: 'http://localhost:8080'
+}
+
 // middleware
 
 app.use(bodyParser.json({ limit: '1mb' }))
 app.use(bodyParser.urlencoded({ limit: '1mb', extended: true }))
 
+const adminRoute = require('./routes/adminRoute')
+
+// db connection
 mongoose.connect(process.env.DB_CONNECT, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true
@@ -24,9 +32,8 @@ mongoose.connect(process.env.DB_CONNECT, {
 	console.log(err)
 })
 
-app.use('/', (req, res) => {
-	res.send('hello world')
-})
+// routes
+app.use('/', adminRoute)
 
 app.listen(5001, () => {
 	console.log('server listening')
